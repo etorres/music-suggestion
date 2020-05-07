@@ -1,4 +1,4 @@
-package hello
+package es.eriktorr.music
 
 import scala.beans.BeanProperty
 

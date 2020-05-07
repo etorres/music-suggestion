@@ -1,11 +1,15 @@
-# Photo Diary
+# Music Suggestion
+
+This is an implementation of the project 26 of the list of [40 Side Project Ideas for Software Engineers](https://www.codementor.io/@npostolovski/40-side-project-ideas-for-software-engineers-g8xckyxef):
+
+> Music suggestion tool (suggested implementation: build a wrapper for the Spotify API). Create a tool that tracks the music you listen to and generates a playlist with similar qualities, but of songs you haven’t heard before. The Spotify API provides all of the tools needed to extract what you’ve listened to and create a playlist — the recommendation engine is up to you!
+
+## Contributing to the project
+
+Install the _serverless framework_:
 
 ```shell script
 npm install -g serverless
-
-npm install middy
-
-npm install aws-sdk
 ```
 
 (Only for new `aws-cli` installations)
@@ -15,6 +19,10 @@ aws configure
 
 ```shell script
 sls create --template aws-scala-sbt
+```
+
+```shell script
+jenv exec sbt clean test
 ```
 
 ```shell script
@@ -46,3 +54,4 @@ aws sts get-caller-identity --profile serverless-music-suggestion
 ## Additional Resources
 
 * [Serverless Framework Documentation](https://www.serverless.com/framework/docs/).
+* []().
