@@ -43,6 +43,12 @@ sls invoke --local --function hello
 sls remove
 ```
 
+TODO:
+
+```shell script
+jenv exec sbt clean coverage test ; jenv exec sbt coverageReport
+```
+
 ## Troubleshooting
 
 Test AWS credentials for command line tools:

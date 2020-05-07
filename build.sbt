@@ -38,9 +38,8 @@ scalafmtOnCompile := true
 wartremoverErrors ++= Warts.unsafe
 wartremoverWarnings ++= Warts.unsafe
 
-//coverageMinimum := 80
-//coverageFailOnMinimum := true
-//coverageEnabled := true
+coverageMinimum := 80
+coverageFailOnMinimum := true
 
 releaseNextVersion := { ver =>
   Version(ver).map(_.bumpMinor.string).getOrElse("Error")

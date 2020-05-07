@@ -144,7 +144,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/music-suggestion/dev/1588861106896-2020-05-07T14:18:26.896Z/music-suggestion.jar"
+          "S3Key": "serverless/music-suggestion/dev/1588861560691-2020-05-07T14:26:00.691Z/music-suggestion.jar"
         },
         "FunctionName": "music-suggestion-dev-hello",
         "Handler": "es.eriktorr.music.Handler",
@@ -163,14 +163,14 @@
         "IamRoleLambdaExecution"
       ]
     },
-    "HelloLambdaVersionpVpq0DtD1fFZ9jPLKLr6EUm67pIWLZpvgr6GtPP2PWo": {
+    "HelloLambdaVersionfyWkxJHWzPh5cOd4nIjcfrIsW4DDxHSIjj6JMK8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "u9EPL2B965OWD8nSA4WhCoyDmzzZdIuW9/C5mtSo9F4="
+        "CodeSha256": "NDte7csnUBApU6u8pkK8kurlXkzPU9faWZWDbzCFP7I="
       }
     }
   },
@@ -183,7 +183,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionpVpq0DtD1fFZ9jPLKLr6EUm67pIWLZpvgr6GtPP2PWo"
+        "Ref": "HelloLambdaVersionfyWkxJHWzPh5cOd4nIjcfrIsW4DDxHSIjj6JMK8"
       }
     }
   }
