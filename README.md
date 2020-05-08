@@ -61,3 +61,4 @@ aws sts get-caller-identity --profile serverless-music-suggestion
 
 * [Serverless Framework Documentation](https://www.serverless.com/framework/docs/).
 * [How to Setup AWS Lambda in Scala without any external Library](https://edward-huang.com/aws/cloud/2019/11/28/how-to-setup-aws-lambda-in-scala-without-any-external-library/).
+* [Get the User's Currently Playing Track](https://developer.spotify.com/documentation/web-api/reference-beta/#endpoint-get-the-users-currently-playing-track).

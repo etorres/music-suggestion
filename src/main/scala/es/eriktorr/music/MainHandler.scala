@@ -15,7 +15,7 @@ object JsonProtocol extends DefaultJsonProtocol {
   implicit val responseFormat: RootJsonFormat[MainResponse] = jsonFormat1(MainResponse)
 }
 
-class MainHandler extends RequestStreamHandler {
+final class MainHandler extends RequestStreamHandler with Logging {
   override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
     val inputString: String = Source.fromInputStream(input).mkString
 
@@ -25,9 +25,9 @@ class MainHandler extends RequestStreamHandler {
     val json = inputString.parseJson
     val request = json.convertTo[MainRequest]
 
-    println(s"Request: ${request.toString}")
+    logger.info(request)
 
-    val response = MainResponse(message = "Hello World!")
+    val response = MainResponse(message = s"Hello ${request.key.getOrElse("guest")}!")
     val outputString = response.toJson.compactPrint
 
     output.write(outputString.toCharArray.map(_.toByte))
