@@ -11,7 +11,8 @@ resolvers += Resolver.sonatypeRepo("public")
 
 libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-events" % "2.2.8",
-  "com.amazonaws" % "aws-lambda-java-log4j2" % "1.1.1"
+  "com.amazonaws" % "aws-lambda-java-log4j2" % "1.1.1",
+  "io.spray" %% "spray-json" % "1.3.5"
 )
 
 scalacOptions ++= Seq(
