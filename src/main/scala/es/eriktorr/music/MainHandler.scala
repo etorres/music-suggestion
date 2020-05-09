@@ -25,7 +25,7 @@ final class MainHandler extends RequestStreamHandler with Logging {
     val json = inputString.parseJson
     val request = json.convertTo[MainRequest]
 
-    logger.info(request)
+    logger.info(s"Request: ${request.toString}")
 
     val response = MainResponse(message = s"Hello ${request.key.getOrElse("guest")}!")
     val outputString = response.toJson.compactPrint

@@ -8,11 +8,15 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 
 final class MainApiGatewayProxyHandler
     extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
-    with BaseApiGatewayProxyHandler {
+    with BaseApiGatewayProxyHandler
+    with Logging {
   private[this] val mainHandler = new MainHandler
 
   override def handleRequest(
     event: APIGatewayProxyRequestEvent,
     context: Context
-  ): APIGatewayProxyResponseEvent = handleRequest(mainHandler, event, context)
+  ): APIGatewayProxyResponseEvent = {
+    logger.info("MainApiGatewayProxyHandler")
+    handleRequest(mainHandler, event, context)
+  }
 }
