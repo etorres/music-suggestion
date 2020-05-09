@@ -14,6 +14,7 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-log4j2" % "1.1.1",
   "io.spray" %% "spray-json" % "1.3.5",
   "com.github.pathikrit" %% "better-files" % "3.8.0",
+  "com.softwaremill.sttp.client" %% "core" % "2.1.1",
   "org.scalatest" %% "scalatest" % "3.1.1" % Test,
   "org.scoverage" %% "scalac-scoverage-runtime" % "1.4.1" % Test
 )

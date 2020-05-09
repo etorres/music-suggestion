@@ -95,6 +95,14 @@ Test AWS credentials for command line tools:
 aws sts get-caller-identity --profile serverless-music-suggestion
 ```
 
+## TO-DO
+
+Add the following plugin to parse the CloudFormation output and extract the service endpoint:
+
+[Serverless plugin to process AWS CloudFormation Stack Output](https://github.com/sbstjn/serverless-stack-output).
+
+Use curl to test the service endpoint in CI.
+
 ## Additional Resources
 
 * [Serverless Framework Documentation](https://www.serverless.com/framework/docs/).

@@ -11,7 +11,7 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 
 import scala.jdk.CollectionConverters._
 
-trait BaseApiGatewayProxyHandler {
+trait ApiGatewayProxyHandler {
   object Defaults {
     val EmptyJson = "{}"
   }

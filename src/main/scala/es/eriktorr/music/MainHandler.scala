@@ -17,13 +17,10 @@ object JsonProtocol extends DefaultJsonProtocol {
 
 final class MainHandler extends RequestStreamHandler with Logging {
   override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
-    val inputString: String = Source.fromInputStream(input).mkString
-
     import JsonProtocol._
     import spray.json._
 
-    val json = inputString.parseJson
-    val request = json.convertTo[MainRequest]
+    val request = Source.fromInputStream(input).mkString.parseJson.convertTo[MainRequest]
 
     logger.info(s"Request: ${request.toString}")
 
