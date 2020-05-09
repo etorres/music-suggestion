@@ -1,5 +1,7 @@
 # Music Suggestion
 
+[![Build Status](https://circleci.com/gh/etorres/music-suggestion.svg?style=svg)](https://circleci.com/gh/etorres/music-suggestion)
+
 This is an (ongoing) implementation of the project 26 of the list of [40 Side Project Ideas for Software Engineers](https://www.codementor.io/@npostolovski/40-side-project-ideas-for-software-engineers-g8xckyxef):
 
 > Music suggestion tool (suggested implementation: build a wrapper for the Spotify API). Create a tool that tracks the music you listen to and generates a playlist with similar qualities, but of songs you haven’t heard before. The Spotify API provides all of the tools needed to extract what you’ve listened to and create a playlist — the recommendation engine is up to you!
