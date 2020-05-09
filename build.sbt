@@ -14,7 +14,8 @@ libraryDependencies ++= Seq(
   "com.amazonaws" % "aws-lambda-java-log4j2" % "1.1.1",
   "io.spray" %% "spray-json" % "1.3.5",
   "com.github.pathikrit" %% "better-files" % "3.8.0",
-  "org.scalatest" %% "scalatest" % "3.1.1" % Test
+  "org.scalatest" %% "scalatest" % "3.1.1" % Test,
+  "org.scoverage" %% "scalac-scoverage-runtime" % "1.4.1" % Test
 )
 
 scalacOptions ++= Seq(
@@ -44,9 +45,7 @@ wartremoverWarnings ++= Warts.unsafe
 coverageMinimum := 80
 coverageFailOnMinimum := true
 
-releaseNextVersion := { ver =>
-  Version(ver).map(_.bumpMinor.string).getOrElse("Error")
-}
+releaseNextVersion := { ver => Version(ver).map(_.bumpMinor.string).getOrElse("Error") }
 
 assemblyJarName in assembly := "music-suggestion.jar"
 
