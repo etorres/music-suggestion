@@ -15,8 +15,11 @@ libraryDependencies ++= Seq(
   "io.spray" %% "spray-json" % "1.3.5",
   "com.github.pathikrit" %% "better-files" % "3.8.0",
   "com.softwaremill.sttp.client" %% "core" % "2.1.1",
+  "com.iheart" %% "ficus" % "1.4.7",
+  "org.scoverage" %% "scalac-scoverage-runtime" % "1.4.1" % Test,
   "org.scalatest" %% "scalatest" % "3.1.1" % Test,
-  "org.scoverage" %% "scalac-scoverage-runtime" % "1.4.1" % Test
+  "com.github.tomakehurst" % "wiremock-jre8" % "2.26.3" % Test,
+  "org.apache.logging.log4j" % "log4j-slf4j-impl" % "2.8.2" % Test
 )
 
 scalacOptions ++= Seq(

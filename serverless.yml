@@ -12,6 +12,9 @@ package:
 functions:
   hello:
     handler: es.eriktorr.music.MainApiGatewayProxyHandler
+    environment:
+      spotifyClientId: ${env:spotifyClientId}
+      spotifyClientSecret: ${env:spotifyClientSecret}
     events:
       - http:
           path: greet/guest
