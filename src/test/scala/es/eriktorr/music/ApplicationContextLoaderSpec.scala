@@ -11,7 +11,10 @@ class ApplicationContextLoaderSpec extends UnitSpec with BeforeAndAfterAll {
     ) shouldBe ApplicationContext(spotifyConfig =
       SpotifyConfig(
         SpotifyCredentials(clientId = "client-id", clientSecret = "client-secret"),
-        "http://localhost:17443/api/token"
+        SpotifyEndpoints(
+          authorization = "http://localhost:17080/api/token",
+          recentlyPlayed = "http://localhost:17080/v1/me/player/recently-played"
+        )
       )
     )
   }

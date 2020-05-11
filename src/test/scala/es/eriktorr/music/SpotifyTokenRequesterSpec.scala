@@ -35,7 +35,7 @@ class SpotifyTokenRequesterSpec extends HttpServerSpec {
 
     val spotifyTokenRequester = new SpotifyTokenRequester
     val token =
-      spotifyTokenRequester.token(spotifyConfig.authorizationEndpoint, spotifyConfig.credentials)
+      spotifyTokenRequester.token(spotifyConfig.endpoints.authorization, spotifyConfig.credentials)
 
     token.getOrElse(InvalidToken) shouldBe SpotifyToken(
       access_token = AccessToken,

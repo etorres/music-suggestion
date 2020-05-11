@@ -7,7 +7,7 @@ import org.scalatest.BeforeAndAfterEach
 
 abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   private[this] val wireMockServer = new WireMockServer(
-    options().port(17443)
+    options().port(17080)
   )
 
   override protected def beforeEach(): Unit = {
