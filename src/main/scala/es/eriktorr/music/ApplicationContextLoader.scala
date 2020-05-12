@@ -6,7 +6,11 @@ import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 
 sealed case class SpotifyCredentials(clientId: String, clientSecret: String)
 sealed case class SpotifyEndpoints(authorization: String, recentlyPlayed: String)
-sealed case class SpotifyConfig(credentials: SpotifyCredentials, endpoints: SpotifyEndpoints)
+sealed case class SpotifyConfig(
+  credentials: SpotifyCredentials,
+  endpoints: SpotifyEndpoints,
+  refreshToken: String
+)
 sealed case class ApplicationContext(spotifyConfig: SpotifyConfig)
 
 object ApplicationContextLoader {

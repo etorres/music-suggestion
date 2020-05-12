@@ -2,13 +2,22 @@ package es.eriktorr.music.unitspec
 
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.MappingBuilder
+import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
+import com.typesafe.config.ConfigFactory
+import es.eriktorr.music.{ApplicationContextLoader, SpotifyConfig}
 import org.scalatest.BeforeAndAfterEach
 
 abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   private[this] val wireMockServer = new WireMockServer(
     options().port(17080)
   )
+
+  protected val spotifyConfig: SpotifyConfig = ApplicationContextLoader
+    .applicationContextFrom(
+      ConfigFactory.parseResources("application-test.conf")
+    )
+    .spotifyConfig
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
@@ -24,4 +33,7 @@ abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   @SuppressWarnings(Array("org.wartremover.warts.NonUnitStatements"))
   protected def stubFor(mappingBuilder: MappingBuilder): Unit =
     wireMockServer.stubFor(mappingBuilder)
+
+  protected def verifyPostRequestTo(path: String): Unit =
+    wireMockServer.verify(postRequestedFor(urlPathEqualTo(path)))
 }
