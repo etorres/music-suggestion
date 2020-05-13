@@ -1,0 +1,39 @@
+{
+  "collaborative" : false,
+  "description" : null,
+  "external_urls" : {
+    "spotify" : "https://open.spotify.com/playlist/6tca25W3oaAx24q1JQKFg0"
+  },
+  "followers" : {
+    "href" : null,
+    "total" : 0
+  },
+  "href" : "https://api.spotify.com/v1/playlists/6tca25W3oaAx24q1JQKFg0",
+  "id" : "6tca25W3oaAx24q1JQKFg0",
+  "images" : [ ],
+  "name" : "My playlist",
+  "owner" : {
+    "display_name" : "the_lin_michael",
+    "external_urls" : {
+      "spotify" : "https://open.spotify.com/user/the_lin_michael"
+    },
+    "href" : "https://api.spotify.com/v1/users/the_lin_michael",
+    "id" : "the_lin_michael",
+    "type" : "user",
+    "uri" : "spotify:user:the_lin_michael"
+  },
+  "primary_color" : null,
+  "public" : true,
+  "snapshot_id" : "MSwyZGE4NjlhN2M2ODZkZGFkYjM3MWVjMWY0NmJkMDk0Yzk3NzVkOWUy",
+  "tracks" : {
+    "href" : "https://api.spotify.com/v1/playlists/6tca25W3oaAx24q1JQKFg0/tracks",
+    "items" : [ ],
+    "limit" : 100,
+    "next" : null,
+    "offset" : 0,
+    "previous" : null,
+    "total" : 0
+  },
+  "type" : "playlist",
+  "uri" : "spotify:playlist:6tca25W3oaAx24q1JQKFg0"
+}

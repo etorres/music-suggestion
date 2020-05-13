@@ -14,7 +14,11 @@ class ApplicationContextLoaderSpec extends UnitSpec with BeforeAndAfterAll {
         SpotifyEndpoints(
           authorization = "http://localhost:17080/api/token",
           recentlyPlayed = "http://localhost:17080/v1/me/player/recently-played",
-          recommendations = "http://localhost:17080/v1/recommendations"
+          recommendations = "http://localhost:17080/v1/recommendations",
+          playlists = SpotifyPlaylistsApi(
+            create = "http://localhost:17080/v1/users/{user_id}/playlists",
+            addItems = "http://localhost:17080/v1/playlists/{playlist_id}/tracks"
+          )
         ),
         refreshToken =
           "BQAT3p9k5N8ZkdWKbNT1iDnjZeCkNa7xDGmF7LnsV4uR1RBqXe-3GhJd2tpBAT2MxXbV1ALVItH0VtSG4m1_cjSuNNew_P0aRwHD25qdVh6ID_OjpL3h4UClez7pX3UutWCgZAm22"

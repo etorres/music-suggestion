@@ -99,6 +99,45 @@ sealed case class SpotifySeed(
 sealed case class SpotifyRecommendations(tracks: Seq[SpotifyTrack], seeds: Seq[SpotifySeed])
     extends SpotifyJson
 
+sealed case class SpotifyFollowers(href: Option[String], total: Int) extends SpotifyJson
+
+sealed case class SpotifyUser(
+  display_name: String,
+  external_urls: Map[String, String],
+  href: String,
+  id: String,
+  `type`: String,
+  uri: String
+) extends SpotifyJson
+
+sealed case class SpotifyPlaylistTracks(
+  href: String,
+  items: Seq[SpotifyTrackItem],
+  limit: Int,
+  next: Option[SpotifyTrackItem],
+  offset: Int,
+  previous: Option[SpotifyTrackItem],
+  total: Int
+) extends SpotifyJson
+
+sealed case class SpotifyPlaylist(
+  collaborative: Boolean,
+  description: Option[String],
+  external_urls: Map[String, String],
+  followers: SpotifyFollowers,
+  href: String,
+  id: String,
+  images: Seq[SpotifyImage],
+  name: String,
+  owner: SpotifyUser,
+  primary_color: Option[String],
+  public: Boolean,
+  snapshot_id: String,
+  tracks: SpotifyPlaylistTracks,
+  `type`: String,
+  uri: String
+) extends SpotifyJson
+
 trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def tokenFormat: RootJsonFormat[SpotifyToken] = jsonFormat4(SpotifyToken)
   implicit def imageFormat: RootJsonFormat[SpotifyImage] = jsonFormat3(SpotifyImage)
@@ -112,6 +151,11 @@ trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def seedFormat: RootJsonFormat[SpotifySeed] = jsonFormat6(SpotifySeed)
   implicit def recommendationsFormat: RootJsonFormat[SpotifyRecommendations] =
     jsonFormat2(SpotifyRecommendations)
+  implicit def followersFormat: RootJsonFormat[SpotifyFollowers] = jsonFormat2(SpotifyFollowers)
+  implicit def userFormat: RootJsonFormat[SpotifyUser] = jsonFormat6(SpotifyUser)
+  implicit def playlistTracksFormat: RootJsonFormat[SpotifyPlaylistTracks] =
+    jsonFormat7(SpotifyPlaylistTracks)
+  implicit def playlistFormat: RootJsonFormat[SpotifyPlaylist] = jsonFormat15(SpotifyPlaylist)
 }
 
 object SpotifyJsonProtocol extends SpotifyJsonProtocol

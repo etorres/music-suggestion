@@ -5,11 +5,16 @@ import net.ceedubs.ficus.Ficus._
 import net.ceedubs.ficus.readers.ArbitraryTypeReader._
 
 sealed case class SpotifyCredentials(clientId: String, clientSecret: String)
+
+sealed case class SpotifyPlaylistsApi(create: String, addItems: String)
+
 sealed case class SpotifyEndpoints(
   authorization: String,
   recentlyPlayed: String,
-  recommendations: String
+  recommendations: String,
+  playlists: SpotifyPlaylistsApi
 )
+
 sealed case class SpotifyConfig(
   credentials: SpotifyCredentials,
   endpoints: SpotifyEndpoints,

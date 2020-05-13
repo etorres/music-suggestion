@@ -27,15 +27,24 @@ abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
           .copy(
             authorization = dynamic(spotifyEndpoints.authorization),
             recentlyPlayed = dynamic(spotifyEndpoints.recentlyPlayed),
-            recommendations = dynamic(spotifyEndpoints.recommendations)
+            recommendations = dynamic(spotifyEndpoints.recommendations),
+            playlists = spotifyEndpoints.playlists.copy(
+              create = dynamic(spotifyEndpoints.playlists.create),
+              addItems = dynamic(spotifyEndpoints.playlists.addItems)
+            )
           )
       )
     )
   }
 
   private[this] def dynamic(endpoint: String): String = {
-    val uri = URI.create(endpoint)
+    val safeEndpoint = endpoint
+      .replaceAll("\\{", "%7B")
+      .replaceAll("}", "%7D")
+    val uri = URI.create(safeEndpoint)
     s"${uri.getScheme}://${uri.getHost}:${wireMockServer.port().toString}${uri.getPath}"
+      .replaceAll("%7B", "{")
+      .replaceAll("%7D", "}")
   }
 
   protected def spotifyConfig(): SpotifyConfig = applicationContext().spotifyConfig
