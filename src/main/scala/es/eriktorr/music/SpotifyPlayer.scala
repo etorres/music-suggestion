@@ -1,7 +1,6 @@
 package es.eriktorr.music
 
 import es.eriktorr.music.SpotifyJsonProtocol._
-import spray.json._
 import sttp.client._
 
 class SpotifyPlayer extends SpotifyBackend {
@@ -14,11 +13,6 @@ class SpotifyPlayer extends SpotifyBackend {
       .get(uri"$playerEndpoint")
 
     val response = send(request)
-
-    // TODO
-    println(s"\n\n >> HERE: ${response.body.toString}\n")
-    // TODO
-
-    response.body.map(_.parseJson.convertTo[SpotifyTracks])
+    decodeJson[SpotifyTracks](response)
   }
 }

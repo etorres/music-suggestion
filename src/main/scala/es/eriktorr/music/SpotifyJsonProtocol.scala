@@ -24,7 +24,7 @@ sealed case class SpotifyImage(
   height: Int,
   width: Int,
   url: String
-)
+) extends SpotifyJson
 
 sealed case class SpotifyAlbum(
   album_type: String,
@@ -40,9 +40,9 @@ sealed case class SpotifyAlbum(
   total_tracks: Int,
   `type`: String,
   uri: String
-)
+) extends SpotifyJson
 
-sealed case class SpotifyTrackObject(
+sealed case class SpotifyTrack(
   album: SpotifyAlbum,
   artists: Seq[SpotifyArtist],
   available_markets: Seq[String],
@@ -66,10 +66,10 @@ sealed case class SpotifyContext(
   href: String,
   `type`: String,
   uri: String
-)
+) extends SpotifyJson
 
-sealed case class SpotifyTrack(
-  track: SpotifyTrackObject,
+sealed case class SpotifyTrackItem(
+  track: SpotifyTrack,
   played_at: String,
   context: Option[SpotifyContext]
 ) extends SpotifyJson
@@ -77,10 +77,10 @@ sealed case class SpotifyTrack(
 sealed case class SpotifyCursor(
   after: String,
   before: String
-)
+) extends SpotifyJson
 
 sealed case class SpotifyTracks(
-  items: Seq[SpotifyTrack],
+  items: Seq[SpotifyTrackItem],
   next: String,
   cursors: SpotifyCursor,
   limit: Int,
@@ -92,10 +92,9 @@ trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def imageFormat: RootJsonFormat[SpotifyImage] = jsonFormat3(SpotifyImage)
   implicit def albumFormat: RootJsonFormat[SpotifyAlbum] = jsonFormat13(SpotifyAlbum)
   implicit def artistFormat: RootJsonFormat[SpotifyArtist] = jsonFormat6(SpotifyArtist)
-  implicit def trackObjectFormat: RootJsonFormat[SpotifyTrackObject] =
-    jsonFormat16(SpotifyTrackObject)
+  implicit def trackFormat: RootJsonFormat[SpotifyTrack] = jsonFormat16(SpotifyTrack)
   implicit def contextFormat: RootJsonFormat[SpotifyContext] = jsonFormat4(SpotifyContext)
-  implicit def trackFormat: RootJsonFormat[SpotifyTrack] = jsonFormat3(SpotifyTrack)
+  implicit def trackItemFormat: RootJsonFormat[SpotifyTrackItem] = jsonFormat3(SpotifyTrackItem)
   implicit def cursorFormat: RootJsonFormat[SpotifyCursor] = jsonFormat2(SpotifyCursor)
   implicit def tracksFormat: RootJsonFormat[SpotifyTracks] = jsonFormat5(SpotifyTracks)
 }

@@ -23,8 +23,17 @@ class SpotifyPlayerSpec extends HttpServerSpec {
       playerEndpoint = spotifyConfig.endpoints.recentlyPlayed
     )
 
-    // TODO
-    println(s"\n\n >> HERE: ${tracks.toString}\n")
-    // TODO
+    tracks.getOrElse(InvalidTracks).items should have size 20
   }
+
+  private[this] lazy val InvalidTracks = SpotifyTracks(
+    items = Seq.empty,
+    next = "",
+    cursors = SpotifyCursor(
+      after = "",
+      before = ""
+    ),
+    limit = 0,
+    href = ""
+  )
 }
