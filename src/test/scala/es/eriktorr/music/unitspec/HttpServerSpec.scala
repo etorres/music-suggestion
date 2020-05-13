@@ -1,5 +1,7 @@
 package es.eriktorr.music.unitspec
 
+import java.net.URI
+
 import com.github.tomakehurst.wiremock.WireMockServer
 import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
@@ -10,14 +12,32 @@ import org.scalatest.BeforeAndAfterEach
 
 abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   private[this] val wireMockServer = new WireMockServer(
-    options().port(17080)
+    options().dynamicPort()
   )
 
-  protected val spotifyConfig: SpotifyConfig = ApplicationContextLoader
-    .applicationContextFrom(
-      ConfigFactory.parseResources("application-test.conf")
+  private[this] def applicationContext() = {
+    val context = ApplicationContextLoader
+      .applicationContextFrom(
+        ConfigFactory.parseResources("application-test.conf")
+      )
+    val spotifyEndpoints = context.spotifyConfig.endpoints
+    context.copy(spotifyConfig =
+      context.spotifyConfig.copy(endpoints =
+        context.spotifyConfig.endpoints
+          .copy(
+            authorization = dynamic(spotifyEndpoints.authorization),
+            recentlyPlayed = dynamic(spotifyEndpoints.recentlyPlayed)
+          )
+      )
     )
-    .spotifyConfig
+  }
+
+  private[this] def dynamic(endpoint: String): String = {
+    val uri = URI.create(endpoint)
+    s"${uri.getScheme}://${uri.getHost}:${wireMockServer.port().toString}${uri.getPath}"
+  }
+
+  protected def spotifyConfig(): SpotifyConfig = applicationContext().spotifyConfig
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()
