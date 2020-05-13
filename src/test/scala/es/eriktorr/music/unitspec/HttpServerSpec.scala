@@ -26,7 +26,8 @@ abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
         context.spotifyConfig.endpoints
           .copy(
             authorization = dynamic(spotifyEndpoints.authorization),
-            recentlyPlayed = dynamic(spotifyEndpoints.recentlyPlayed)
+            recentlyPlayed = dynamic(spotifyEndpoints.recentlyPlayed),
+            recommendations = dynamic(spotifyEndpoints.recommendations)
           )
       )
     )

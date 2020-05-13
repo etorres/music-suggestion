@@ -87,6 +87,18 @@ sealed case class SpotifyTracks(
   href: String
 ) extends SpotifyJson
 
+sealed case class SpotifySeed(
+  initialPoolSize: Int,
+  afterFilteringSize: Int,
+  afterRelinkingSize: Int,
+  id: String,
+  `type`: String,
+  href: String
+) extends SpotifyJson
+
+sealed case class SpotifyRecommendations(tracks: Seq[SpotifyTrack], seeds: Seq[SpotifySeed])
+    extends SpotifyJson
+
 trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def tokenFormat: RootJsonFormat[SpotifyToken] = jsonFormat4(SpotifyToken)
   implicit def imageFormat: RootJsonFormat[SpotifyImage] = jsonFormat3(SpotifyImage)
@@ -97,6 +109,9 @@ trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def trackItemFormat: RootJsonFormat[SpotifyTrackItem] = jsonFormat3(SpotifyTrackItem)
   implicit def cursorFormat: RootJsonFormat[SpotifyCursor] = jsonFormat2(SpotifyCursor)
   implicit def tracksFormat: RootJsonFormat[SpotifyTracks] = jsonFormat5(SpotifyTracks)
+  implicit def seedFormat: RootJsonFormat[SpotifySeed] = jsonFormat6(SpotifySeed)
+  implicit def recommendationsFormat: RootJsonFormat[SpotifyRecommendations] =
+    jsonFormat2(SpotifyRecommendations)
 }
 
 object SpotifyJsonProtocol extends SpotifyJsonProtocol

@@ -20,7 +20,7 @@ class SpotifyPlayerSpec extends HttpServerSpec {
     val spotifyPlayer = new SpotifyPlayer
     val tracks = spotifyPlayer.recentlyPlayedTracks(
       authorizationBearer = "Nej3WCRXQs0_",
-      playerEndpoint = spotifyConfig.endpoints.recentlyPlayed
+      playerEndpoint = spotifyConfig().endpoints.recentlyPlayed
     )
 
     tracks.getOrElse(InvalidTracks).items should have size 20
