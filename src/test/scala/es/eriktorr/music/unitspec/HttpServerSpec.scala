@@ -55,6 +55,9 @@ abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   protected def stubFor(mappingBuilder: MappingBuilder): Unit =
     wireMockServer.stubFor(mappingBuilder)
 
+  protected def verifyGetRequestTo(path: String): Unit =
+    wireMockServer.verify(getRequestedFor(urlEqualTo(path)))
+
   protected def verifyPostRequestTo(path: String): Unit =
     wireMockServer.verify(postRequestedFor(urlPathEqualTo(path)))
 }

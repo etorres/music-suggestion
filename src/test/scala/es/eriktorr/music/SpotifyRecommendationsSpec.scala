@@ -5,8 +5,10 @@ import es.eriktorr.music.unitspec.HttpServerSpec
 
 class SpotifyRecommendationsSpec extends HttpServerSpec {
   "Spotify recommendations" should "get tracks matched against similar tracks" in {
+    val path =
+      "/v1/recommendations?seed_tracks=65YTkL1HqiFPcAuCabVwMf,2KfWw8uwvCFOasBZ7xsmZo&limit=10"
     stubFor(
-      get("/v1/recommendations?seed_tracks=65YTkL1HqiFPcAuCabVwMf,2KfWw8uwvCFOasBZ7xsmZo&limit=10")
+      get(path)
         .withHeader("Authorization", equalTo("Bearer JqyrxCsALiot"))
         .willReturn(
           aResponse()
@@ -23,6 +25,8 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
       seedTracks = Seq("65YTkL1HqiFPcAuCabVwMf", "2KfWw8uwvCFOasBZ7xsmZo")
     )
+
+    verifyGetRequestTo(path)
 
     recommendations.getOrElse(InvalidRecommendations).tracks should have size 10
   }
