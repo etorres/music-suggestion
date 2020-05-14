@@ -12,18 +12,14 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
 import scala.jdk.CollectionConverters._
 
 trait ApiGatewayProxyHandler {
-  object Defaults {
-    val EmptyJson = "{}"
-  }
-
   def handleRequest(
     handler: RequestStreamHandler,
     event: APIGatewayProxyRequestEvent,
     context: Context
   ): APIGatewayProxyResponseEvent = {
-    def requestBody: String = Option(event.getBody).getOrElse(Defaults.EmptyJson)
+    val requestBody = Option(event.getBody).getOrElse(Defaults.EmptyJson)
 
-    val response = (for {
+    val responseBody = (for {
       input <- requestBody.inputStream.autoClosed
       output <- new ByteArrayOutputStream().autoClosed
     } yield {
@@ -31,12 +27,16 @@ trait ApiGatewayProxyHandler {
       output.toString()
     }).get()
 
-    val headers = Map("x-api-gateway-proxy-footprint" -> this.getClass.getSimpleName)
+    val responseHeaders = Map("x-api-gateway-proxy-footprint" -> this.getClass.getSimpleName)
 
     new APIGatewayProxyResponseEvent()
       .withStatusCode(200)
-      .withHeaders(headers.asJava)
-      .withBody(response)
+      .withHeaders(responseHeaders.asJava)
+      .withBody(responseBody)
       .withIsBase64Encoded(false)
+  }
+
+  object Defaults {
+    val EmptyJson = "{}"
   }
 }

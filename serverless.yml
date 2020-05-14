@@ -11,11 +11,18 @@ package:
 
 functions:
   greetings:
-    handler: es.eriktorr.music.greetings.GuestGreeterProxy
+    handler: es.eriktorr.music.greetings.GuestGreeterProxy2
     environment:
       spotifyClientId: ${env:spotifyClientId}
       spotifyClientSecret: ${env:spotifyClientSecret}
     events:
       - http:
-          path: greet/guest
+          path: greet
           method: get
+      - http:
+          path: greet/{name}
+          method: get
+          request:
+            parameters:
+              paths:
+                name: true
