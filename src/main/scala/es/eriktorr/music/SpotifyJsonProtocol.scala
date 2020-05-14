@@ -138,6 +138,10 @@ sealed case class SpotifyPlaylist(
   uri: String
 ) extends SpotifyJson
 
+sealed case class SpotifyUris(uris: Seq[String]) extends SpotifyJson
+
+sealed case class SpotifySnapshotId(snapshot_id: String) extends SpotifyJson
+
 trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def tokenFormat: RootJsonFormat[SpotifyToken] = jsonFormat4(SpotifyToken)
   implicit def imageFormat: RootJsonFormat[SpotifyImage] = jsonFormat3(SpotifyImage)
@@ -156,6 +160,8 @@ trait SpotifyJsonProtocol extends DefaultJsonProtocol {
   implicit def playlistTracksFormat: RootJsonFormat[SpotifyPlaylistTracks] =
     jsonFormat7(SpotifyPlaylistTracks)
   implicit def playlistFormat: RootJsonFormat[SpotifyPlaylist] = jsonFormat15(SpotifyPlaylist)
+  implicit def urisFormat: RootJsonFormat[SpotifyUris] = jsonFormat1(SpotifyUris)
+  implicit def snapshotIdFormat: RootJsonFormat[SpotifySnapshotId] = jsonFormat1(SpotifySnapshotId)
 }
 
 object SpotifyJsonProtocol extends SpotifyJsonProtocol

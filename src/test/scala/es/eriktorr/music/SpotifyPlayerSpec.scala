@@ -6,9 +6,11 @@ import es.eriktorr.music.unitspec.HttpServerSpec
 class SpotifyPlayerSpec extends HttpServerSpec {
   "Spotify player" should "get current's user recently played tracks" in {
     val path = "/v1/me/player/recently-played"
+    val token = "Nej3WCRXQs0_"
+
     stubFor(
       get(path)
-        .withHeader("Authorization", equalTo("Bearer Nej3WCRXQs0_"))
+        .withHeader("Authorization", equalTo(s"Bearer $token"))
         .willReturn(
           aResponse()
             .withStatus(200)
@@ -20,7 +22,7 @@ class SpotifyPlayerSpec extends HttpServerSpec {
 
     val spotifyPlayer = new SpotifyPlayer
     val tracks = spotifyPlayer.recentlyPlayedTracks(
-      authorizationBearer = "Nej3WCRXQs0_",
+      authorizationBearer = token,
       playerEndpoint = spotifyConfig().endpoints.recentlyPlayed
     )
 
