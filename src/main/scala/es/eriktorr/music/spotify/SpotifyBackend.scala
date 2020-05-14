@@ -1,4 +1,4 @@
-package es.eriktorr.music
+package es.eriktorr.music.spotify
 
 import spray.json.JsonReader
 import sttp.client.{HttpURLConnectionBackend, Identity, NothingT, Request, Response, SttpBackend}

@@ -10,8 +10,8 @@ package:
   artifact: target/scala-2.13/music-suggestion.jar
 
 functions:
-  hello:
-    handler: es.eriktorr.music.MainApiGatewayProxyHandler
+  greetings:
+    handler: es.eriktorr.music.greetings.GuestGreeterProxy
     environment:
       spotifyClientId: ${env:spotifyClientId}
       spotifyClientSecret: ${env:spotifyClientSecret}

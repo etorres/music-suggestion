@@ -35,7 +35,7 @@ sls deploy -v
 You can invoke this application locally:
 
 ```shell script
-sls invoke --local --function hello
+sls invoke --local --function greetings
 ```
 
 Or you can trigger an invocation by accessing the API gateway like this:

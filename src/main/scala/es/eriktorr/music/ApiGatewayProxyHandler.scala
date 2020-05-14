@@ -21,7 +21,7 @@ trait ApiGatewayProxyHandler {
     event: APIGatewayProxyRequestEvent,
     context: Context
   ): APIGatewayProxyResponseEvent = {
-    def requestBody = Option(event.getBody).getOrElse(Defaults.EmptyJson)
+    def requestBody: String = Option(event.getBody).getOrElse(Defaults.EmptyJson)
 
     val response = (for {
       input <- requestBody.inputStream.autoClosed
@@ -31,7 +31,7 @@ trait ApiGatewayProxyHandler {
       output.toString()
     }).get()
 
-    val headers = Map("x-custom-response-header" -> "my custom response header value")
+    val headers = Map("x-api-gateway-proxy-footprint" -> this.getClass.getSimpleName)
 
     new APIGatewayProxyResponseEvent()
       .withStatusCode(200)

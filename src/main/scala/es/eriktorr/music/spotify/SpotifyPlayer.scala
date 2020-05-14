@@ -1,6 +1,6 @@
-package es.eriktorr.music
+package es.eriktorr.music.spotify
 
-import es.eriktorr.music.SpotifyJsonProtocol._
+import es.eriktorr.music.spotify.SpotifyJsonProtocol._
 import sttp.client._
 
 class SpotifyPlayer extends SpotifyBackend {

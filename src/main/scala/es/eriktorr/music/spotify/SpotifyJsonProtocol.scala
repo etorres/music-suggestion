@@ -1,4 +1,4 @@
-package es.eriktorr.music
+package es.eriktorr.music.spotify
 
 import spray.json._
 

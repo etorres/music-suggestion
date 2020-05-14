@@ -1,4 +1,4 @@
-package es.eriktorr.music
+package es.eriktorr.music.spotify
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, equalToJson, post}
 import es.eriktorr.music.unitspec.HttpServerSpec

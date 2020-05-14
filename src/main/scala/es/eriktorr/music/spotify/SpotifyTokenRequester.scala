@@ -1,8 +1,9 @@
-package es.eriktorr.music
+package es.eriktorr.music.spotify
 
 import java.util.Base64
 
-import es.eriktorr.music.SpotifyJsonProtocol._
+import es.eriktorr.music.SpotifyCredentials
+import es.eriktorr.music.spotify.SpotifyJsonProtocol._
 import sttp.client._
 
 class SpotifyTokenRequester extends SpotifyBackend {
