@@ -7,7 +7,7 @@ import com.github.tomakehurst.wiremock.client.MappingBuilder
 import com.github.tomakehurst.wiremock.client.WireMock._
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import com.typesafe.config.ConfigFactory
-import es.eriktorr.music.{ApplicationContextLoader, SpotifyConfig}
+import es.eriktorr.music.{ApplicationContextLoader, SpotifyConfig, UsersConfig}
 import org.scalatest.BeforeAndAfterEach
 
 abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
@@ -48,6 +48,8 @@ abstract class HttpServerSpec extends UnitSpec with BeforeAndAfterEach {
   }
 
   protected def spotifyConfig(): SpotifyConfig = applicationContext().spotifyConfig
+
+  protected def usersConfig(): UsersConfig = applicationContext().usersConfig
 
   override protected def beforeEach(): Unit = {
     super.beforeEach()

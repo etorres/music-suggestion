@@ -17,10 +17,14 @@ sealed case class SpotifyEndpoints(
 
 sealed case class SpotifyConfig(
   credentials: SpotifyCredentials,
-  endpoints: SpotifyEndpoints,
-  refreshToken: String
+  endpoints: SpotifyEndpoints
 )
-sealed case class ApplicationContext(spotifyConfig: SpotifyConfig)
+
+sealed case class User(userId: String, refreshToken: String)
+
+sealed case class UsersConfig(users: Seq[User])
+
+sealed case class ApplicationContext(spotifyConfig: SpotifyConfig, usersConfig: UsersConfig)
 
 object ApplicationContextLoader {
   def applicationContext(): ApplicationContext =
@@ -28,7 +32,8 @@ object ApplicationContextLoader {
 
   def applicationContextFrom(config: Config): ApplicationContext = {
     val spotifyConfig: SpotifyConfig = config.as[SpotifyConfig]("spotify")
+    val usersConfig: UsersConfig = config.as[UsersConfig]("usersDatabase")
 
-    ApplicationContext(spotifyConfig)
+    ApplicationContext(spotifyConfig, usersConfig)
   }
 }

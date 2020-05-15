@@ -9,6 +9,9 @@ import spray.json.JsonFormat
 final class MusicRecommender
     extends LambdaRequestHandler[MusicFeatures, MusicRecommendation]
     with Logging {
+
+  private[this] val applicationContext = ApplicationContextLoader.applicationContext()
+
   override def handle(
     parameters: Map[String, String],
     musicFeatures: MusicFeatures,
@@ -21,11 +24,12 @@ final class MusicRecommender
 
     (for {
       userId <- userIdFrom(parameters)
-      spotifyConfig <- Right(ApplicationContextLoader.applicationContext().spotifyConfig)
+      refreshToken <- refreshTokenFor(userId)
+      spotifyConfig <- Right(applicationContext.spotifyConfig)
       token <- (new SpotifyTokenRequester).token(
         authorizationEndpoint = spotifyConfig.endpoints.authorization,
         credentials = spotifyConfig.credentials,
-        refreshToken = spotifyConfig.refreshToken
+        refreshToken = refreshToken
       )
       seedTracks <- (new SpotifyPlayer)
         .recentlyPlayedTracks(
@@ -62,6 +66,12 @@ final class MusicRecommender
         MusicRecommendation(Seq.empty)
     }
   }
+
+  private[this] def refreshTokenFor(userId: String) =
+    applicationContext.usersConfig.users.find(user => user.userId == userId) match {
+      case Some(user) => Right(user.refreshToken)
+      case None => Left(s"User not found: $userId")
+    }
 
   private[this] def playlistUrlFrom(playlist: SpotifyPlaylist) =
     playlist.external_urls.get("spotify") match {
