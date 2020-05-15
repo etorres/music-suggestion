@@ -24,6 +24,7 @@ final class MusicRecommender
 
     (for {
       userId <- userIdFrom(parameters)
+      playlistName <- playlistNameFrom(parameters)
       refreshToken <- refreshTokenFor(userId)
       spotifyConfig <- Right(applicationContext.spotifyConfig)
       token <- (new SpotifyTokenRequester).token(
@@ -45,7 +46,7 @@ final class MusicRecommender
         )
         .map(_.tracks.map(_.uri))
       playlist <- (new SpotifyPlaylistModifier).create(
-        name = Defaults.PlaylistName,
+        name = playlistName,
         userId = userId,
         authorizationBearer = token.access_token,
         createPlaylistEndpoint = spotifyConfig.endpoints.playlists.create
@@ -66,6 +67,9 @@ final class MusicRecommender
         MusicRecommendation(Seq.empty)
     }
   }
+
+  private[this] def playlistNameFrom(parameters: Map[String, String]) =
+    Right(parameters.getOrElse("playlistName", Defaults.PlaylistName))
 
   private[this] def refreshTokenFor(userId: String) =
     applicationContext.usersConfig.users.find(user => user.userId == userId) match {
@@ -116,6 +120,6 @@ final class MusicRecommender
 
   object Defaults {
     val MaximumSeedTracks = 5
-    val PlaylistName = "My Playlist"
+    val PlaylistName = "Indispensable Music"
   }
 }

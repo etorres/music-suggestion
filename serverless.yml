@@ -28,10 +28,14 @@ functions:
     environment:
       spotifyClientId: ${env:spotifyClientId}
       spotifyClientSecret: ${env:spotifyClientSecret}
+      spotifyUserId: ${env:spotifyUserId}
       spotifyRefreashToken: ${env:spotifyRefreashToken}
     events:
       - http:
           path: recommendations/{userId}
+          method: post
+      - http:
+          path: recommendations/{userId}/{playlistName}
           method: post
           request:
             parameters:
