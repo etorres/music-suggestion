@@ -11,7 +11,7 @@ package:
 
 functions:
   greetings:
-    handler: es.eriktorr.music.greetings.GuestGreeterProxy2
+    handler: es.eriktorr.music.greetings.GuestGreeter
     events:
       - http:
           path: greet

@@ -3,10 +3,8 @@ package es.eriktorr.music.greetings
 import java.io.{InputStream, OutputStream}
 
 import com.amazonaws.services.lambda.runtime.{Context, RequestStreamHandler}
-import es.eriktorr.music.Logging
-import spray.json.{DefaultJsonProtocol, RootJsonFormat}
-
-import scala.io.Source
+import es.eriktorr.music.aws.lambda.function.MessageJsonBinding
+import spray.json.{RootJsonFormat, _}
 
 sealed case class GreetingsRequest(name: Option[String])
 sealed case class GreetingsResponse(message: String)
@@ -16,18 +14,17 @@ object JsonProtocol extends DefaultJsonProtocol {
   implicit val responseFormat: RootJsonFormat[GreetingsResponse] = jsonFormat1(GreetingsResponse)
 }
 
-final class GuestGreeter extends RequestStreamHandler with Logging {
+class GuestGreeter
+    extends RequestStreamHandler
+    with MessageJsonBinding[GreetingsRequest, GreetingsResponse] {
   override def handleRequest(input: InputStream, output: OutputStream, context: Context): Unit = {
     import JsonProtocol._
-    import spray.json._
 
-    val request = Source.fromInputStream(input).mkString.parseJson.convertTo[GreetingsRequest]
+    val message = unmarshal(input).name match {
+      case Some(name) => s"Hi $name!"
+      case None => "Hi guest!"
+    }
 
-    logger.info(s"Request: ${request.toString}")
-
-    val response = GreetingsResponse(message = s"Hi ${request.name.getOrElse("guest")}!")
-    val outputString = response.toJson.compactPrint
-
-    output.write(outputString.toCharArray.map(_.toByte))
+    marshal(GreetingsResponse(message), output)
   }
 }

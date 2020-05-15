@@ -5,7 +5,7 @@ import com.amazonaws.services.lambda.runtime.events.{
   APIGatewayProxyResponseEvent
 }
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
-import es.eriktorr.music.aws.lambda.LambdaProxy
+import es.eriktorr.music.aws.lambda.proxy.ApiGatewayProxy
 import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 object MusicRecommendationJsonProtocol extends DefaultJsonProtocol {
@@ -18,7 +18,7 @@ object MusicRecommendationJsonProtocol extends DefaultJsonProtocol {
 
 final class MusicRecommenderProxy
     extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
-    with LambdaProxy[MusicFeatures, MusicRecommendation] {
+    with ApiGatewayProxy[MusicFeatures, MusicRecommendation] {
 
   private[this] val requestHandler = new MusicRecommender
   import MusicRecommendationJsonProtocol._

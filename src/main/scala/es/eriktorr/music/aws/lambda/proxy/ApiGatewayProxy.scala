@@ -1,4 +1,4 @@
-package es.eriktorr.music.aws.lambda
+package es.eriktorr.music.aws.lambda.proxy
 
 import java.util
 
@@ -11,9 +11,9 @@ import spray.json.{JsonFormat, _}
 
 import scala.jdk.CollectionConverters._
 
-trait LambdaProxy[I, O] {
+trait ApiGatewayProxy[I, O] {
   def handleRequest(
-    handler: LambdaRequestHandler[I, O],
+    handler: ApiGatewayRequestHandler[I, O],
     event: APIGatewayProxyRequestEvent,
     context: Context
   )(
@@ -27,7 +27,7 @@ trait LambdaProxy[I, O] {
         .handle(
           parameters =
             paramsFrom(event.getPathParameters) ++ paramsFrom(event.getQueryStringParameters),
-          requestBody = requestBody.parseJson.convertTo[I],
+          request = requestBody.parseJson.convertTo[I],
           context = context
         )
 

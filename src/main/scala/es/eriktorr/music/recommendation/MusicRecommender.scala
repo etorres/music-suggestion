@@ -1,13 +1,13 @@
 package es.eriktorr.music.recommendation
 
 import com.amazonaws.services.lambda.runtime.Context
-import es.eriktorr.music.aws.lambda.LambdaRequestHandler
+import es.eriktorr.music.aws.lambda.proxy.ApiGatewayRequestHandler
 import es.eriktorr.music.spotify._
 import es.eriktorr.music.{ApplicationContextLoader, Logging, SpotifyConfig}
 import spray.json.JsonFormat
 
 final class MusicRecommender
-    extends LambdaRequestHandler[MusicFeatures, MusicRecommendation]
+    extends ApiGatewayRequestHandler[MusicFeatures, MusicRecommendation]
     with Logging {
 
   private[this] val applicationContext = ApplicationContextLoader.applicationContext()
