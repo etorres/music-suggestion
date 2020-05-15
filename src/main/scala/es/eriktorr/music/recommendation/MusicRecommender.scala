@@ -39,7 +39,7 @@ final class MusicRecommender
           recommendationsEndpoint = spotifyConfig.endpoints.recommendations,
           seedTracks = seedTracks
         )
-        .map(_.tracks.map(_.id))
+        .map(_.tracks.map(_.uri))
       playlist <- (new SpotifyPlaylistModifier).create(
         name = Defaults.PlaylistName,
         userId = userId,
@@ -55,7 +55,12 @@ final class MusicRecommender
         token = token,
         spotifyConfig = spotifyConfig
       )
-    } yield musicRecommendation).getOrElse(MusicRecommendation(Seq.empty))
+    } yield musicRecommendation) match {
+      case Right(musicRecommendation) => musicRecommendation
+      case Left(errorMessage) =>
+        logger.error(errorMessage)
+        MusicRecommendation(Seq.empty)
+    }
   }
 
   private[this] def playlistUrlFrom(playlist: SpotifyPlaylist) =
