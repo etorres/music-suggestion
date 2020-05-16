@@ -8,17 +8,22 @@ import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import es.eriktorr.music.ApplicationContextLoader
 import es.eriktorr.music.aws.lambda.proxy.ApiGatewayProxy
 
-final class MusicRecommenderProxy
+final class MusicRecommenderProxy(private[this] val recommenderHandler: MusicRecommenderHandler)
     extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
     with ApiGatewayProxy[MusicFeatures, MusicRecommendation] {
 
-  private[this] val requestHandler = new MusicRecommender(
-    ApplicationContextLoader.applicationContext()
-  )
+  def this() = {
+    this(
+      recommenderHandler = new MusicRecommender(
+        ApplicationContextLoader.applicationContext()
+      )
+    )
+  }
+
   import MusicRecommenderJsonProtocol._
 
   override def handleRequest(
     event: APIGatewayProxyRequestEvent,
     context: Context
-  ): APIGatewayProxyResponseEvent = handleRequest(requestHandler, event, context)
+  ): APIGatewayProxyResponseEvent = handleRequest(recommenderHandler, event, context)
 }

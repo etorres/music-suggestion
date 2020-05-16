@@ -1,30 +1,49 @@
 package es.eriktorr.music.recommendation
 
+import es.eriktorr.music.ApplicationContext
 import es.eriktorr.music.unitspec.{HttpServerSpec, LambdaRuntimeStubs}
 
 class MusicRecommenderSpec extends HttpServerSpec with LambdaRuntimeStubs {
-//  private[this] val recommender = new MusicRecommender(
-//    ApplicationContext(spotifyConfig(), usersConfig())
-//  )
+  import MusicRecommenderJsonProtocol._
 
-  "Recommendation proxy" should "create a playlist with tracks matched against input parameters" in {
-//    recommender.handle()
-//    recommender.handleRequest(
-//      aRequest(Some("""{"energetic":true}"""), Map("playlistName" -> "My Playlist")),
-//      ContextStub
-//    )
-    // TODO
+  "Music recommender" should "create a playlist with tracks matched against input parameters" in {
+    new MusicRecommender(
+      ApplicationContext(spotifyConfig(), usersConfig())
+    ).handle(
+      parameters = Map("playlistName" -> "My Playlist"),
+      musicFeatures =
+        MusicFeatures(None, None, energetic = Some(true), None, None, None, None, None),
+      awsLambdaContext = ContextStub
+    ) shouldBe MusicRecommendation(playlists =
+      Seq(MusicPlaylist(name = "My Playlist", service = "spotify", url = "spotify:my_playlist"))
+    )
   }
 
   it should "create a playlist using default parameters" in {
-//    recommender.handleRequest(aRequest(None, Map.empty), ContextStub)
-    // TODO
+    new MusicRecommender(
+      ApplicationContext(spotifyConfig(), usersConfig())
+    ).handle(
+      parameters = Map.empty,
+      musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None),
+      awsLambdaContext = ContextStub
+    ) shouldBe MusicRecommendation(playlists =
+      Seq(
+        MusicPlaylist(
+          name = "Indispensable Music",
+          service = "spotify",
+          url = "spotify:my_playlist"
+        )
+      )
+    )
   }
 
   it should "return an empty body on an error" in {
-//    recommender
-//      .handleRequest(aRequest(None, Map.empty), ContextStub)
-//      .getBody shouldBe """{"playlists":[]"""
-    // TODO
+    new MusicRecommender(
+      ApplicationContext(spotifyConfig(), usersConfig())
+    ).handle(
+      parameters = Map.empty,
+      musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None),
+      awsLambdaContext = ContextStub
+    ) shouldBe MusicRecommendation(playlists = Seq.empty)
   }
 }

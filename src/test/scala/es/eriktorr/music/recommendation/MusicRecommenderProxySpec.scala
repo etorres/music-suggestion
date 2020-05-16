@@ -1,25 +1,18 @@
-package es.eriktorr.music.lambda.proxy
+package es.eriktorr.music.recommendation
 
+import com.amazonaws.services.lambda.runtime.Context
 import com.amazonaws.services.lambda.runtime.events.{
   APIGatewayProxyRequestEvent,
   APIGatewayProxyResponseEvent
-}
-import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
-import es.eriktorr.music.aws.lambda.proxy.{ApiGatewayProxy, ApiGatewayRequestHandler}
-import es.eriktorr.music.recommendation.{
-  MusicFeatures,
-  MusicPlaylist,
-  MusicRecommendation,
-  MusicRecommenderJsonProtocol
 }
 import es.eriktorr.music.unitspec.{LambdaRuntimeStubs, UnitSpec}
 import spray.json.JsonFormat
 
 import scala.jdk.CollectionConverters._
 
-class ApiGatewayProxySpec extends UnitSpec with LambdaRuntimeStubs {
-  "API gateway proxy" should "forward input parameters to the request handler" in {
-    val recommenderProxy = new ApiGatewayProxyFake(
+class MusicRecommenderProxySpec extends UnitSpec with LambdaRuntimeStubs {
+  "Music recommender proxy" should "forward input parameters to the request handler" in {
+    val recommenderProxy = new MusicRecommenderProxy(
       stubFor(
         (
           Map("playlistName" -> "My Playlist"),
@@ -35,7 +28,7 @@ class ApiGatewayProxySpec extends UnitSpec with LambdaRuntimeStubs {
       ContextStub
     ) shouldBe new APIGatewayProxyResponseEvent()
       .withStatusCode(200)
-      .withHeaders(Map("x-api-gateway-proxy-footprint" -> "ApiGatewayProxyFake").asJava)
+      .withHeaders(Map("x-api-gateway-proxy-footprint" -> "MusicRecommenderProxy").asJava)
       .withBody(
         """{"playlists":[{"name":"My Playlist","service":"spotify","url":"spotify:my_playlist"}]}"""
       )
@@ -43,7 +36,7 @@ class ApiGatewayProxySpec extends UnitSpec with LambdaRuntimeStubs {
   }
 
   it should "forward default parameters on empty requests" in {
-    val recommenderProxy = new ApiGatewayProxyFake(
+    val recommenderProxy = new MusicRecommenderProxy(
       stubFor(
         (
           Map.empty,
@@ -61,7 +54,7 @@ class ApiGatewayProxySpec extends UnitSpec with LambdaRuntimeStubs {
       ContextStub
     ) shouldBe new APIGatewayProxyResponseEvent()
       .withStatusCode(200)
-      .withHeaders(Map("x-api-gateway-proxy-footprint" -> "ApiGatewayProxyFake").asJava)
+      .withHeaders(Map("x-api-gateway-proxy-footprint" -> "MusicRecommenderProxy").asJava)
       .withBody(
         """{"playlists":[{"name":"Default Name","service":"spotify","url":"spotify:my_playlist"}]}"""
       )
@@ -81,34 +74,21 @@ class ApiGatewayProxySpec extends UnitSpec with LambdaRuntimeStubs {
   private[this] def stubFor(
     expected: (Map[String, String], MusicFeatures),
     response: MusicRecommendation
-  ): ApiGatewayRequestHandlerFake = new ApiGatewayRequestHandlerFake(expected, response)
+  ): MusicRecommenderFake = new MusicRecommenderFake(expected, response)
 
-  final class ApiGatewayRequestHandlerFake(
+  final class MusicRecommenderFake(
     expected: (Map[String, String], MusicFeatures),
     response: MusicRecommendation
-  ) extends ApiGatewayRequestHandler[MusicFeatures, MusicRecommendation] {
+  ) extends MusicRecommenderHandler {
     override def handle(parameters: Map[String, String], request: MusicFeatures, context: Context)(
       implicit requestJsonFormat: JsonFormat[MusicFeatures],
       responseJsonFormat: JsonFormat[MusicRecommendation]
-    ): MusicRecommendation =
-      expected match {
-        case (expectedParameters, expectedRequest) =>
-          if (parameters == expectedParameters && request == expectedRequest) response
-          else InvalidMusicRecommendation
-        case _ => InvalidMusicRecommendation
-      }
-  }
-
-  final class ApiGatewayProxyFake(private[this] val requestHandler: ApiGatewayRequestHandlerFake)
-      extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
-      with ApiGatewayProxy[MusicFeatures, MusicRecommendation] {
-
-    import MusicRecommenderJsonProtocol._
-
-    override def handleRequest(
-      event: APIGatewayProxyRequestEvent,
-      context: Context
-    ): APIGatewayProxyResponseEvent = handleRequest(requestHandler, event, context)
+    ): MusicRecommendation = expected match {
+      case (expectedParameters, expectedRequest) =>
+        if (parameters == expectedParameters && request == expectedRequest) response
+        else InvalidMusicRecommendation
+      case _ => InvalidMusicRecommendation
+    }
   }
 
   private[this] lazy val InvalidMusicRecommendation = MusicRecommendation(
