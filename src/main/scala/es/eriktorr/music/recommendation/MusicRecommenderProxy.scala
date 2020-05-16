@@ -6,16 +6,27 @@ import com.amazonaws.services.lambda.runtime.events.{
 }
 import com.amazonaws.services.lambda.runtime.{Context, RequestHandler}
 import es.eriktorr.music.ApplicationContextLoader
-import es.eriktorr.music.aws.lambda.proxy.ApiGatewayProxy
+import es.eriktorr.music.aws.lambda.proxy.{ApiGatewayProxy, ApiGatewayRequestHandler}
+import es.eriktorr.music.spotify.{
+  SpotifyPlayerBackend,
+  SpotifyPlaylistModifierBackend,
+  SpotifyRecommenderBackend,
+  SpotifyTokenRequesterBackend
+}
 
-final class MusicRecommenderProxy(private[this] val recommenderHandler: MusicRecommenderHandler)
-    extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
+final class MusicRecommenderProxy(
+  private[this] val requestHandler: ApiGatewayRequestHandler[MusicFeatures, MusicRecommendation]
+) extends RequestHandler[APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent]
     with ApiGatewayProxy[MusicFeatures, MusicRecommendation] {
 
   def this() = {
     this(
-      recommenderHandler = new MusicRecommender(
-        ApplicationContextLoader.applicationContext()
+      requestHandler = new MusicRecommender(
+        applicationContext = ApplicationContextLoader.applicationContext(),
+        spotifyTokenRequester = new SpotifyTokenRequesterBackend,
+        spotifyPlayer = new SpotifyPlayerBackend,
+        spotifyRecommender = new SpotifyRecommenderBackend,
+        spotifyPlaylistModifier = new SpotifyPlaylistModifierBackend
       )
     )
   }
@@ -25,5 +36,5 @@ final class MusicRecommenderProxy(private[this] val recommenderHandler: MusicRec
   override def handleRequest(
     event: APIGatewayProxyRequestEvent,
     context: Context
-  ): APIGatewayProxyResponseEvent = handleRequest(recommenderHandler, event, context)
+  ): APIGatewayProxyResponseEvent = handleRequest(requestHandler, event, context)
 }

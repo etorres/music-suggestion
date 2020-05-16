@@ -22,7 +22,7 @@ class SpotifyPlaylistModifierSpec extends HttpServerSpec {
         )
     )
 
-    val playlistModifier = new SpotifyPlaylistModifier
+    val playlistModifier = new SpotifyPlaylistModifierBackend
     val playlist = playlistModifier.create(
       name = ExpectedPlaylist.name,
       userId = ExpectedPlaylist.owner.id,
@@ -56,7 +56,7 @@ class SpotifyPlaylistModifierSpec extends HttpServerSpec {
         )
     )
 
-    val playlistModifier = new SpotifyPlaylistModifier
+    val playlistModifier = new SpotifyPlaylistModifierBackend
     val snapshotIdResponse = playlistModifier.addItemsTo(
       playlistId = playlistId,
       items = SpotifyUris(uris = Seq(track1, track2)),

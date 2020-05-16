@@ -20,7 +20,7 @@ class SpotifyPlayerSpec extends HttpServerSpec {
         )
     )
 
-    val spotifyPlayer = new SpotifyPlayer
+    val spotifyPlayer = new SpotifyPlayerBackend
     val tracks = spotifyPlayer.recentlyPlayedTracks(
       authorizationBearer = token,
       playerEndpoint = spotifyConfig().endpoints.recentlyPlayed

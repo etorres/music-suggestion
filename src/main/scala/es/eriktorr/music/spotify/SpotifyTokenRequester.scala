@@ -6,7 +6,15 @@ import es.eriktorr.music.SpotifyCredentials
 import es.eriktorr.music.spotify.SpotifyJsonProtocol._
 import sttp.client._
 
-class SpotifyTokenRequester extends SpotifyBackend {
+trait SpotifyTokenRequester {
+  def token(
+    authorizationEndpoint: String,
+    credentials: SpotifyCredentials,
+    refreshToken: String
+  ): Either[String, SpotifyToken]
+}
+
+final class SpotifyTokenRequesterBackend extends SpotifyTokenRequester with SpotifyBackend {
   def token(
     authorizationEndpoint: String,
     credentials: SpotifyCredentials,

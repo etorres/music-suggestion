@@ -23,7 +23,7 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
         )
     )
 
-    val spotifyRecommender = new SpotifyRecommender
+    val spotifyRecommender = new SpotifyRecommenderBackend
     val recommendations = spotifyRecommender.recommendedTracks(
       authorizationBearer = token,
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
@@ -37,7 +37,7 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
   }
 
   it should "fail with exception when no seed tracks are provided" in {
-    val spotifyRecommender = new SpotifyRecommender
+    val spotifyRecommender = new SpotifyRecommenderBackend
     the[IllegalArgumentException] thrownBy spotifyRecommender.recommendedTracks(
       authorizationBearer = "JqyrxCsALiot",
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
@@ -47,7 +47,7 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
   }
 
   it should "fail with exception when seed tracks limit is exceeded" in {
-    val spotifyRecommender = new SpotifyRecommender
+    val spotifyRecommender = new SpotifyRecommenderBackend
     the[IllegalArgumentException] thrownBy spotifyRecommender.recommendedTracks(
       authorizationBearer = "JqyrxCsALiot",
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,

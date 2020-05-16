@@ -3,7 +3,23 @@ package es.eriktorr.music.spotify
 import es.eriktorr.music.spotify.SpotifyJsonProtocol._
 import sttp.client._
 
-class SpotifyPlaylistModifier extends SpotifyBackend {
+trait SpotifyPlaylistModifier {
+  def create(
+    name: String,
+    userId: String,
+    authorizationBearer: String,
+    createPlaylistEndpoint: String
+  ): Either[String, SpotifyPlaylist]
+
+  def addItemsTo(
+    playlistId: String,
+    items: SpotifyUris,
+    authorizationBearer: String,
+    addItemsEndpoint: String
+  ): Either[String, SpotifySnapshotId]
+}
+
+final class SpotifyPlaylistModifierBackend extends SpotifyPlaylistModifier with SpotifyBackend {
   def create(
     name: String,
     userId: String,

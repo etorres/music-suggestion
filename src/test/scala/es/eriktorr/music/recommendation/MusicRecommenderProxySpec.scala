@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.events.{
   APIGatewayProxyRequestEvent,
   APIGatewayProxyResponseEvent
 }
+import es.eriktorr.music.aws.lambda.proxy.ApiGatewayRequestHandler
 import es.eriktorr.music.unitspec.{LambdaRuntimeStubs, UnitSpec}
 import spray.json.JsonFormat
 
@@ -79,7 +80,7 @@ class MusicRecommenderProxySpec extends UnitSpec with LambdaRuntimeStubs {
   final class MusicRecommenderFake(
     expected: (Map[String, String], MusicFeatures),
     response: MusicRecommendation
-  ) extends MusicRecommenderHandler {
+  ) extends ApiGatewayRequestHandler[MusicFeatures, MusicRecommendation] {
     override def handle(parameters: Map[String, String], request: MusicFeatures, context: Context)(
       implicit requestJsonFormat: JsonFormat[MusicFeatures],
       responseJsonFormat: JsonFormat[MusicRecommendation]

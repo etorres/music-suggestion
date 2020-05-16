@@ -1,12 +1,18 @@
 package es.eriktorr.music.recommendation
 
 import com.amazonaws.services.lambda.runtime.Context
+import es.eriktorr.music.aws.lambda.proxy.ApiGatewayRequestHandler
 import es.eriktorr.music.spotify._
 import es.eriktorr.music.{ApplicationContext, Logging, SpotifyConfig}
 import spray.json.JsonFormat
 
-final class MusicRecommender(private[this] val applicationContext: ApplicationContext)
-    extends MusicRecommenderHandler
+final class MusicRecommender(
+  private[this] val applicationContext: ApplicationContext,
+  private[this] val spotifyTokenRequester: SpotifyTokenRequester,
+  private[this] val spotifyPlayer: SpotifyPlayer,
+  private[this] val spotifyRecommender: SpotifyRecommender,
+  private[this] val spotifyPlaylistModifier: SpotifyPlaylistModifier
+) extends ApiGatewayRequestHandler[MusicFeatures, MusicRecommendation]
     with Logging {
 
   override def handle(
@@ -24,18 +30,18 @@ final class MusicRecommender(private[this] val applicationContext: ApplicationCo
       playlistName <- playlistNameFrom(parameters)
       refreshToken <- refreshTokenFor(userId)
       spotifyConfig <- Right(applicationContext.spotifyConfig)
-      token <- (new SpotifyTokenRequester).token(
+      token <- spotifyTokenRequester.token(
         authorizationEndpoint = spotifyConfig.endpoints.authorization,
         credentials = spotifyConfig.credentials,
         refreshToken = refreshToken
       )
-      seedTracks <- (new SpotifyPlayer)
+      seedTracks <- spotifyPlayer
         .recentlyPlayedTracks(
           authorizationBearer = token.access_token,
           playerEndpoint = spotifyConfig.endpoints.recentlyPlayed
         )
         .map(_.items.map(_.track.id).take(Defaults.MaximumSeedTracks))
-      recommendedTracks <- (new SpotifyRecommender)
+      recommendedTracks <- spotifyRecommender
         .recommendedTracks(
           authorizationBearer = token.access_token,
           recommendationsEndpoint = spotifyConfig.endpoints.recommendations,
@@ -43,7 +49,7 @@ final class MusicRecommender(private[this] val applicationContext: ApplicationCo
           musicFeatures = musicFeatures
         )
         .map(_.tracks.map(_.uri))
-      playlist <- (new SpotifyPlaylistModifier).create(
+      playlist <- spotifyPlaylistModifier.create(
         name = playlistName,
         userId = userId,
         authorizationBearer = token.access_token,
@@ -95,7 +101,7 @@ final class MusicRecommender(private[this] val applicationContext: ApplicationCo
     token: SpotifyToken,
     spotifyConfig: SpotifyConfig
   ): Either[String, MusicRecommendation] =
-    (new SpotifyPlaylistModifier).addItemsTo(
+    spotifyPlaylistModifier.addItemsTo(
       playlistId = playlistId,
       items = SpotifyUris(recommendedTracks),
       authorizationBearer = token.access_token,

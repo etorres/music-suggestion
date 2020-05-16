@@ -4,7 +4,16 @@ import es.eriktorr.music.recommendation.MusicFeatures
 import es.eriktorr.music.spotify.SpotifyJsonProtocol._
 import sttp.client._
 
-class SpotifyRecommender extends SpotifyBackend {
+trait SpotifyRecommender {
+  def recommendedTracks(
+    authorizationBearer: String,
+    recommendationsEndpoint: String,
+    seedTracks: Seq[String],
+    musicFeatures: MusicFeatures
+  ): Either[String, SpotifyRecommendations]
+}
+
+final class SpotifyRecommenderBackend extends SpotifyRecommender with SpotifyBackend {
   def recommendedTracks(
     authorizationBearer: String,
     recommendationsEndpoint: String,
