@@ -9,18 +9,24 @@ class MusicRecommenderSpec extends HttpServerSpec with LambdaRuntimeStubs with S
 
   "Music recommender" should "create a playlist with tracks matched against input parameters" in {
     aMusicRecommender.handle(
-      parameters = Map("playlistName" -> "My Playlist"),
+      parameters = Map("userId" -> "the_lin_michael", "playlistName" -> "My Playlist"),
       musicFeatures =
         MusicFeatures(None, None, energetic = Some(true), None, None, None, None, None),
       awsLambdaContext = ContextStub
     ) shouldBe MusicRecommendation(playlists =
-      Seq(MusicPlaylist(name = "My Playlist", service = "spotify", url = "spotify:my_playlist"))
+      Seq(
+        MusicPlaylist(
+          name = "My Playlist",
+          service = "spotify",
+          url = "https://lcoalhost/playlist/1"
+        )
+      )
     )
   }
 
   it should "create a playlist using default parameters" in {
     aMusicRecommender.handle(
-      parameters = Map.empty,
+      parameters = Map("userId" -> "the_lin_michael"),
       musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None),
       awsLambdaContext = ContextStub
     ) shouldBe MusicRecommendation(playlists =
@@ -28,7 +34,7 @@ class MusicRecommenderSpec extends HttpServerSpec with LambdaRuntimeStubs with S
         MusicPlaylist(
           name = "Indispensable Music",
           service = "spotify",
-          url = "spotify:my_playlist"
+          url = "https://lcoalhost/playlist/1"
         )
       )
     )
@@ -119,7 +125,7 @@ class MusicRecommenderSpec extends HttpServerSpec with LambdaRuntimeStubs with S
       userId: String,
       authorizationBearer: String,
       createPlaylistEndpoint: String
-    ): Either[String, SpotifyPlaylist] = Right(SpotifyPlaylist1)
+    ): Either[String, SpotifyPlaylist] = Right(SpotifyPlaylist1.copy(name = name))
 
     override def addItemsTo(
       playlistId: String,

@@ -71,7 +71,7 @@ trait SpotifyWebApiStubs {
   val SpotifyPlaylist1: SpotifyPlaylist = SpotifyPlaylist(
     collaborative = false,
     description = None,
-    external_urls = Map.empty,
+    external_urls = Map("spotify" -> "https://lcoalhost/playlist/1"),
     followers = SpotifyFollowers(href = None, total = 1000),
     href = "http://localhost/playlist1",
     id = "playlist1",
