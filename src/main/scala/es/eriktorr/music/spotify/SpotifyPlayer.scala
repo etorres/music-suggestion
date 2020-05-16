@@ -20,6 +20,9 @@ final class SpotifyPlayerBackend extends SpotifyPlayer with SpotifyBackend {
       .get(uri"$playerEndpoint")
 
     val response = send(request)
-    decodeJson[SpotifyTracks](response)
+    decodeJson[SpotifyTracks](
+      response,
+      errorMessage = "Cannot get current's user recently played tracks"
+    )
   }
 }

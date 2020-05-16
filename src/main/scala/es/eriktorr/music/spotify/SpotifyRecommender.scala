@@ -30,7 +30,7 @@ final class SpotifyRecommenderBackend extends SpotifyRecommender with SpotifyBac
       .get(uri"$recommendationsEndpoint?$queryParams")
 
     val response = send(request)
-    decodeJson[SpotifyRecommendations](response)
+    decodeJson[SpotifyRecommendations](response, errorMessage = "Cannot get recommendations")
   }
 
   private[this] def queryParametersFrom(musicFeatures: MusicFeatures): Map[String, String] = {

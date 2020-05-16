@@ -13,9 +13,13 @@ trait SpotifyBackend {
   }
 
   protected def decodeJson[T <: SpotifyJson: JsonReader](
-    response: Identity[Response[Either[String, String]]]
+    response: Identity[Response[Either[String, String]]],
+    errorMessage: String
   ): Either[String, T] = {
     import spray.json._
-    response.body.map(_.parseJson.convertTo[T])
+    response.body.map(_.parseJson.convertTo[T]) match {
+      case Right(obj) => Right(obj)
+      case Left(cause) => Left(s"$errorMessage - cause: $cause")
+    }
   }
 }

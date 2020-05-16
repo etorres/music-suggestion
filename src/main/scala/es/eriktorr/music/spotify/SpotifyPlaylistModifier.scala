@@ -34,7 +34,7 @@ final class SpotifyPlaylistModifierBackend extends SpotifyPlaylistModifier with 
       .post(uri"$uri")
 
     val response = send(request)
-    decodeJson[SpotifyPlaylist](response)
+    decodeJson[SpotifyPlaylist](response, errorMessage = s"Cannot create the playlist $name")
   }
 
   def addItemsTo(
@@ -51,7 +51,10 @@ final class SpotifyPlaylistModifierBackend extends SpotifyPlaylistModifier with 
       .post(uri"$uri")
 
     val response = send(request)
-    decodeJson[SpotifySnapshotId](response)
+    decodeJson[SpotifySnapshotId](
+      response,
+      errorMessage = s"Cannot add items to the playlist $playlistId"
+    )
   }
 
   protected def asCompactJson(spotifyUris: SpotifyUris): String = {

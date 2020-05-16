@@ -26,7 +26,7 @@ final class SpotifyTokenRequesterBackend extends SpotifyTokenRequester with Spot
       .post(uri"$authorizationEndpoint")
 
     val response = send(request)
-    decodeJson[SpotifyToken](response)
+    decodeJson[SpotifyToken](response, errorMessage = "Cannot get a refreshed access token")
   }
 
   private[this] def basicAuthorizationFrom(spotifyCredentials: SpotifyCredentials): String = {
