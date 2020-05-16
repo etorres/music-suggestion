@@ -1,6 +1,7 @@
 package es.eriktorr.music.spotify
 
 import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, equalTo, get}
+import es.eriktorr.music.recommendation.MusicFeatures
 import es.eriktorr.music.unitspec.HttpServerSpec
 
 class SpotifyRecommendationsSpec extends HttpServerSpec {
@@ -26,7 +27,8 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
     val recommendations = spotifyRecommender.recommendedTracks(
       authorizationBearer = token,
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
-      seedTracks = Seq(track1, track2)
+      seedTracks = Seq(track1, track2),
+      musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None)
     )
 
     verifyGetRequestTo(path)
@@ -39,7 +41,8 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
     the[IllegalArgumentException] thrownBy spotifyRecommender.recommendedTracks(
       authorizationBearer = "JqyrxCsALiot",
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
-      seedTracks = Seq()
+      seedTracks = Seq(),
+      musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None)
     ) should have message "requirement failed: Up to 5 seed tracks may be provided"
   }
 
@@ -48,7 +51,8 @@ class SpotifyRecommendationsSpec extends HttpServerSpec {
     the[IllegalArgumentException] thrownBy spotifyRecommender.recommendedTracks(
       authorizationBearer = "JqyrxCsALiot",
       recommendationsEndpoint = spotifyConfig().endpoints.recommendations,
-      seedTracks = Seq("1", "2", "3", "4", "5", "6")
+      seedTracks = Seq("1", "2", "3", "4", "5", "6"),
+      musicFeatures = MusicFeatures(None, None, None, None, None, None, None, None)
     ) should have message "requirement failed: Up to 5 seed tracks may be provided"
   }
 
