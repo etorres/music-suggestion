@@ -41,14 +41,7 @@ final class MusicRecommender(
           playerEndpoint = spotifyConfig.endpoints.recentlyPlayed
         )
         .map(_.items.map(_.track.id).take(Defaults.MaximumSeedTracks))
-      recommendedTracks <- spotifyRecommender
-        .recommendedTracks(
-          authorizationBearer = token.access_token,
-          recommendationsEndpoint = spotifyConfig.endpoints.recommendations,
-          seedTracks = seedTracks,
-          musicFeatures = musicFeatures
-        )
-        .map(_.tracks.map(_.uri))
+      recommendedTracks <- recommendedTracks(musicFeatures, spotifyConfig, token, seedTracks)
       playlist <- spotifyPlaylistModifier.create(
         name = playlistName,
         userId = userId,
@@ -72,6 +65,12 @@ final class MusicRecommender(
     }
   }
 
+  private[this] def userIdFrom(parameters: Map[String, String]) =
+    parameters.get("userId") match {
+      case Some(value) => Right(value)
+      case None => Left("Required parameter: userId")
+    }
+
   private[this] def playlistNameFrom(parameters: Map[String, String]) =
     Right(parameters.getOrElse("playlistName", Defaults.PlaylistName))
 
@@ -81,16 +80,29 @@ final class MusicRecommender(
       case None => Left(s"User not found: $userId")
     }
 
+  private def recommendedTracks(
+    musicFeatures: MusicFeatures,
+    spotifyConfig: SpotifyConfig,
+    token: SpotifyToken,
+    seedTracks: Seq[String]
+  ) =
+    spotifyRecommender
+      .recommendedTracks(
+        authorizationBearer = token.access_token,
+        recommendationsEndpoint = spotifyConfig.endpoints.recommendations,
+        seedTracks = seedTracks,
+        musicFeatures = musicFeatures
+      )
+      .map(_.tracks.map(_.uri)) match {
+      case Right(trackUris) =>
+        if (trackUris.isEmpty) Left("No tracks recommended") else Right(trackUris)
+      case Left(errorMessage) => Left(errorMessage)
+    }
+
   private[this] def playlistUrlFrom(playlist: SpotifyPlaylist) =
     playlist.external_urls.get("spotify") match {
       case Some(url) => Right(url)
       case None => Left("Failed to create Spotify playlist")
-    }
-
-  private[this] def userIdFrom(parameters: Map[String, String]) =
-    parameters.get("userId") match {
-      case Some(value) => Right(value)
-      case None => Left("Required parameter: userId")
     }
 
   private[this] def musicRecommendation(
