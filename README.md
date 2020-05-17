@@ -112,3 +112,4 @@ Use curl to test the service endpoint in CI.
 * [AWS Lambda: Cold boot and mean response times in Scala vs. Java](https://blog.codecentric.de/en/2019/02/aws-lambda-cold-boot-and-mean-response-times-in-scala-vs-java/).
 * [Benefits of Amazon API Gateway](https://www.serverless.com/amazon-api-gateway/).
 * [Authenticate and get an oauth token for your Spotify app from the command line](https://gist.github.com/hughrawlinson/1d24595d3648d53440552436dc215d90).
+* [Is my Spotify music boring? An analysis involving music, data, and machine learning](https://towardsdatascience.com/is-my-spotify-music-boring-an-analysis-involving-music-data-and-machine-learning-47550ae931de).
